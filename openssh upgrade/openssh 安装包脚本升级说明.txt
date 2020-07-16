@@ -1,0 +1,15 @@
+一，二进制安装包上传到服务器
+
+二，解压安装
+ tar zxvf openssh-server8.1P1.tar.gz -C /
+ systemctl daemon-reload   
+ systemctl restart ssh
+
+三，其他node节点批量安装
+ansible allnode -m copy -a "src=/home/sdn/openssh-server8.1P1.tar.gz dest=/tmp/ "
+ansible allnode -m shell  -a "tar zxvf /tmp/openssh-server8.1P1.tar.gz -C / " --become
+ansible allnode -m shell  -a "systemctl daemon-reload " --become
+ansible allnode -m shell  -a "systemctl restart ssh" --become
+ansible allnode -m shell  -a "ssh -V" --become
+
+
