@@ -1,0 +1,24 @@
+#密码复杂性
+- name: 安装libpam-cracklib
+  shell: apt-get update && apt install -y libpam-cracklib --allow-unauthenticated
+
+- name: 修改配置文件/etc/pam.d/common-password
+  template: src=common-password dest=/etc/pam.d/common-password mode=644
+
+#日志文件
+- name: 修改/etc/rsyslog.conf
+  copy: src=templates/rsyslog.conf dest=/etc/rsyslog.conf mode=644
+
+- name: 修改/etc/rsyslog.d/50-default.conf
+  copy: src=templates/50-default.conf dest=/etc/rsyslog.d/50-default.conf mode=644
+
+#system基线包括sudo权限、新用户密码过期时间、ssh禁止root登录
+- name: 复制jxsystem.sh 
+  copy: src=templates/jxsystem.sh dest=/tmp mode=755
+
+- name: 修正system基线
+  shell: bash /tmp/jxsystem.sh
+
+#umask 027
+- name: umask修正
+  shell: if [ $(cat /etc/profile|grep "umask 027"|wc -l) -eq 0 ];then echo 'umask 027' >>/etc/profile;fi

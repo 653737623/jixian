@@ -1,0 +1,5 @@
+- name: 备份文件
+  shell: cp /usr/local/openresty/nginx/conf/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf_$(date +%F_%H_%M_%S)
+
+- name: 修改配置文件
+  copy: src=templates/nginx.conf dest=/usr/local/openresty/nginx/conf/nginx.conf mode=644
